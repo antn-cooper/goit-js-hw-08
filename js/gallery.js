@@ -50,7 +50,8 @@ const images = [
 
 const container = document.querySelector('.gallery');
 
-container.insertAdjacentHTML('beforeend', galleryMarkUp(image));
+container.insertAdjacentHTML('beforeend', galleryMarkUp(images));
+container.addEventListener('click', handleClick);
 
 function galleryMarkUp(arr) {
   return arr
@@ -63,9 +64,25 @@ function galleryMarkUp(arr) {
       src="${image.preview}"
       data-source="${image.original}"
       alt="${image.description}"
+      width="360"
+      height="200"
     />
   </a>
 </li>`
     )
     .join('');
+}
+
+function handleClick(event) {
+  event.preventDefault();
+
+  if (event.target.classList.contains('gallery-image')) {
+    const imageSource = event.target.dataset.source;
+    console.log(imageSource);
+    const instance = basicLightbox.create(`
+<div class = 'modal'> 
+<img src ="${imageSource} " alt="${event.target.alt}>"
+</div>`);
+    instance.show();
+  }
 }
