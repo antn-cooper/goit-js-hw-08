@@ -75,14 +75,26 @@ function galleryMarkUp(arr) {
 
 function handleClick(event) {
   event.preventDefault();
-
-  if (event.target.classList.contains('gallery-image')) {
-    const imageSource = event.target.dataset.source;
-    console.log(imageSource);
-    const instance = basicLightbox.create(`
-<div class = 'modal'> 
-<img src ="${imageSource} " alt="${event.target.alt}>"
-</div>`);
-    instance.show();
+  if (!event.target.classList.contains('gallery-image')) {
+    return;
   }
+
+  const imageSource = event.target.dataset.source;
+
+  const instance = basicLightbox.create(
+    `<div class="modal-window">
+        <img src="${imageSource}" alt="${event.target.alt}" width="1112" height="640" />
+      </div>`,
+    {
+      onShow: (instance) => {
+        instance
+          .element()
+          .querySelector('img')
+          .addEventListener('click', () => {
+            instance.close();
+          });
+      },
+    }
+  );
+  instance.show();
 }
